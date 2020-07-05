@@ -1,8 +1,16 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 export function Restaurants() {
   const [restaurants, setRestaurants] = useState([])
+
+  useEffect(() => {
+    fetch('/api/Restaurants')
+      .then(response => response.json())
+      .then(apiData => {
+        setRestaurants(apiData)
+      })
+  }, [])
 
   return (
     <>
