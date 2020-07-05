@@ -34,16 +34,22 @@ function SingleRestaurantFromList(props) {
   )
 }
 
-export function Restaurants() {
+export function Restaurants(props) {
   const [restaurants, setRestaurants] = useState([])
 
+  console.log('RestaurantList rendering')
   useEffect(() => {
-    fetch('/api/Restaurants')
+    const url =
+      props.activeFilter.length === 0
+        ? `/api/Restaurants`
+        : `/api/Restaurants?filter=${props.activeFilter}`
+
+    fetch(url)
       .then(response => response.json())
       .then(apiData => {
         setRestaurants(apiData)
       })
-  }, [])
+  }, [props.activeFilter])
 
   return (
     <>
