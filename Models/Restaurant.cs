@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,5 +29,7 @@ namespace TacoTuesday.Models
         {
             this.DownvoteCount++;
         }
+
+        public List<Review> Reviews { get; set; }
     }
 }
