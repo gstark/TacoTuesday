@@ -15,19 +15,31 @@ function SingleRestaurantFromList(props) {
       </div>
       <p className="mb-1">{restaurant.address}</p>
       <small className="mr-3">
-        <button className="btn btn-success btn-sm">
+        <button
+          className="btn btn-success btn-sm"
+          onClick={event => {
+            event.preventDefault()
+            props.handleVote(restaurant.id, 'upvote')
+          }}
+        >
           <span className="mr-2" role="img" aria-label="upvote">
             👍🏻
           </span>
-          5
+          {restaurant.upvoteCount}
         </button>
       </small>
       <small className="mr-3">
-        <button className="btn btn-danger btn-sm">
+        <button
+          className="btn btn-danger btn-sm"
+          onClick={event => {
+            event.preventDefault()
+            props.handleVote(restaurant.id, 'downvote')
+          }}
+        >
           <span className="mr-2" role="img" aria-label="downvote">
             👎🏻
           </span>{' '}
-          3
+          {restaurant.downvoteCount}
         </button>
       </small>
     </Link>
@@ -38,7 +50,12 @@ export function Restaurants(props) {
   const [restaurants, setRestaurants] = useState([])
 
   console.log('RestaurantList rendering')
+
   useEffect(() => {
+    reloadRestaurants()
+  }, [props.activeFilter])
+
+  const reloadRestaurants = () => {
     const url =
       props.activeFilter.length === 0
         ? `/api/Restaurants`
@@ -49,7 +66,18 @@ export function Restaurants(props) {
       .then(apiData => {
         setRestaurants(apiData)
       })
-  }, [props.activeFilter])
+  }
+
+  const handleVote = (id, type) => {
+    const url = `/api/RestaurantVotes/${id}/${type}`
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+    }).then(() => {
+      reloadRestaurants()
+    })
+  }
 
   return (
     <>
@@ -68,6 +96,7 @@ export function Restaurants(props) {
           <SingleRestaurantFromList
             key={restaurant.id}
             restaurant={restaurant}
+            handleVote={handleVote}
           />
         ))}
       </div>

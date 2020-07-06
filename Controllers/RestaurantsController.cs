@@ -38,11 +38,11 @@ namespace TacoTuesday.Controllers
 
             if (filter == null)
             {
-                return await _context.Restaurants.ToListAsync();
+                return await _context.Restaurants.OrderBy(restaurant => restaurant.Name).ToListAsync();
             }
             else
             {
-                return await _context.Restaurants.Where(restaurant => restaurant.Name.Contains(filter)).ToListAsync();
+                return await _context.Restaurants.OrderBy(restaurant => restaurant.Name).Where(restaurant => restaurant.Name.Contains(filter)).ToListAsync();
             }
         }
 
