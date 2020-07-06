@@ -3,6 +3,7 @@ import { useHistory } from 'react-router'
 
 export function AddRestaurant() {
   const history = useHistory()
+  const [errorMessage, setErrorMessage] = useState()
   const [newRestaurant, setNewRestaurant] = useState({
     name: '',
     description: '',
@@ -22,14 +23,19 @@ export function AddRestaurant() {
   const handleFormSubmit = event => {
     event.preventDefault()
 
+    console.log('submitting')
     fetch('/api/Restaurants', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(newRestaurant),
     })
       .then(response => response.json())
-      .then(() => {
-        history.push('/')
+      .then(apiResponse => {
+        if (apiResponse.status === 400) {
+          setErrorMessage(Object.values(apiResponse.errors).join(' '))
+        } else {
+          history.push('/')
+        }
       })
   }
 
@@ -37,6 +43,11 @@ export function AddRestaurant() {
     <div className="card">
       <div className="card-header">Add a Restaurant</div>
       <div className="card-body">
+        {errorMessage && (
+          <div className="alert alert-danger" role="alert">
+            {errorMessage}
+          </div>
+        )}
         <form onSubmit={handleFormSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
