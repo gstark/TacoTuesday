@@ -11,7 +11,7 @@ function SingleRestaurantFromList(props) {
     >
       <div className="d-flex w-100 justify-content-between">
         <h5 className="mb-1">{restaurant.name}</h5>
-        <small>5 Reviews</small>
+        <small>{restaurant.reviews.length} Reviews</small>
       </div>
       <p className="mb-1">{restaurant.address}</p>
       <small className="mr-3">
