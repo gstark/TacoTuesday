@@ -1,7 +1,28 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 
 export function ShowRestaurant() {
+  const [restaurant, setRestaurant] = useState({
+    name: '',
+    description: '',
+    address: '',
+    telephone: '',
+  })
+
+  const params = useParams()
+  const id = params.id
+
+  useState(() => {
+    const fetchRestaurant = async () => {
+      const response = await fetch(`/api/Restaurants/${id}`)
+      const apiData = await response.json()
+
+      setRestaurant(apiData)
+    }
+
+    fetchRestaurant()
+  }, [id])
+
   return (
     <div className="taco-listing">
       <div className="media mb-5">
@@ -9,17 +30,12 @@ export function ShowRestaurant() {
           🌮
         </span>
         <div className="media-body">
-          <h1 className="mt-0">Grump Gringo</h1>
-          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
-          scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-          vulputate fringilla. Donec lacinia congue felis in faucibus.
+          <h1 className="mt-0">{restaurant.name}</h1>
+          {restaurant.description}
           <address className="mt-3">
-            <Link to="maps.google.com">
-              1355 Market St, Suite 900 San Francisco, CA 94103
-            </Link>
+            <Link to="maps.google.com">{restaurant.address}</Link>
           </address>
-          <Link to="tel:867-5309">867-5309</Link>
+          <Link to={`tel:${restaurant.telephone}`}>{restaurant.telephone}</Link>
         </div>
       </div>
 
