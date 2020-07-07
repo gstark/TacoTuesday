@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import format from 'date-fns/format'
+
+const dateFormat = `EEEE, MMMM do, yyyy 'at' h:mm aaa`
 
 export function ShowRestaurant() {
   const params = useParams()
@@ -76,7 +79,9 @@ export function ShowRestaurant() {
                 <li key={review.id}>
                   <p className="mb-2">
                     {review.summary}
-                    <span className="float-right">{review.createdAt}</span>
+                    <span className="float-right">
+                      {format(new Date(review.createdAt), dateFormat)}
+                    </span>
                   </p>
                   <p>{review.body}</p>
                 </li>
