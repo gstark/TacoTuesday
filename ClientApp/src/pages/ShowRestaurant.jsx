@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 export function ShowRestaurant() {
+  const params = useParams()
+  const id = parseInt(params.id)
+
   const [restaurant, setRestaurant] = useState({
     name: '',
     description: '',
@@ -10,20 +13,44 @@ export function ShowRestaurant() {
     reviews: [],
   })
 
-  const params = useParams()
-  const id = params.id
+  const [newReview, setNewReview] = useState({
+    body: '',
+    summary: '',
+    restaurantId: id,
+  })
+
+  const fetchRestaurant = async () => {
+    const response = await fetch(`/api/Restaurants/${id}`)
+    const apiData = await response.json()
+
+    setRestaurant(apiData)
+  }
 
   useState(() => {
-    const fetchRestaurant = async () => {
-      const response = await fetch(`/api/Restaurants/${id}`)
-      const apiData = await response.json()
-
-      setRestaurant(apiData)
-    }
-
     fetchRestaurant()
   }, [id])
 
+  const handleNewReviewFieldChange = event => {
+    const id = event.target.id
+    const value = event.target.value
+
+    setNewReview({ ...newReview, [id]: value })
+  }
+
+  const handleNewReviewSubmit = event => {
+    event.preventDefault()
+
+    fetch(`/api/Reviews`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(newReview),
+    })
+      .then(response => response.json)
+      .then(apiResponse => {
+        fetchRestaurant()
+        setNewReview({ ...newReview, body: '', summary: '' })
+      })
+  }
   return (
     <div className="taco-listing">
       <div className="media mb-5">
@@ -62,7 +89,7 @@ export function ShowRestaurant() {
       <div className="card">
         <div className="card-header">Enter your own review</div>
         <div className="card-body">
-          <form>
+          <form onSubmit={handleNewReviewSubmit}>
             <div className="form-group">
               <label htmlFor="summary">Summary</label>
               <input
@@ -70,6 +97,8 @@ export function ShowRestaurant() {
                 className="form-control"
                 id="summary"
                 aria-describedby="summaryHelp"
+                value={newReview.summary}
+                onChange={handleNewReviewFieldChange}
               />
               <small id="summaryHelp" className="form-text text-muted">
                 Enter a brief summary of your review. Example:{' '}
@@ -77,8 +106,13 @@ export function ShowRestaurant() {
               </small>
             </div>
             <div className="form-group">
-              <label for="review">Review</label>
-              <textarea type="text" className="form-control" id="review" />
+              <label htmlFor="body">Review</label>
+              <textarea
+                className="form-control"
+                id="body"
+                value={newReview.body}
+                onChange={handleNewReviewFieldChange}
+              />
             </div>
             <button type="submit" className="btn btn-primary">
               Submit
