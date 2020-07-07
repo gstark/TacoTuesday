@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Route } from 'react-router'
 
 export function NavBar(props) {
   const [filterText, setFilterText] = useState('')
@@ -37,25 +38,27 @@ export function NavBar(props) {
             </Link>
           </li>
         </ul>
-        <form className="form-inline my-2 my-lg-0">
-          <Link className="btn btn-success mr-2" to="/restaurants/add">
-            + Add
-          </Link>
-          <input
-            className="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            value={filterText}
-            onChange={event => setFilterText(event.target.value)}
-          />
-          <span
-            className="btn btn-outline-success my-2 my-sm-0"
-            onClick={handleClickSearch}
-          >
-            Search
-          </span>
-        </form>
+        <Route exact path="/">
+          <form className="form-inline my-2 my-lg-0">
+            <Link className="btn btn-success mr-2" to="/restaurants/add">
+              + Add
+            </Link>
+            <input
+              className="form-control mr-sm-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              value={filterText}
+              onChange={event => setFilterText(event.target.value)}
+            />
+            <span
+              className="btn btn-outline-success my-2 my-sm-0"
+              onClick={handleClickSearch}
+            >
+              Search
+            </span>
+          </form>
+        </Route>
       </div>
     </nav>
   )
