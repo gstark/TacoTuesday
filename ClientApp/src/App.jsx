@@ -9,6 +9,7 @@ import { AddRestaurant } from './pages/AddRestaurant'
 import { ShowRestaurant } from './pages/ShowRestaurant'
 import { NavBar } from './components/NavBar'
 import { SignUp } from './pages/SignUp'
+import { SignIn } from './pages/SignIn'
 
 export function App() {
   const [activeFilter, setActiveFilter] = useState('')
@@ -24,6 +25,9 @@ export function App() {
           </Route>
           <Route path="/signup">
             <SignUp />
+          </Route>
+          <Route path="/signin">
+            <SignIn />
           </Route>
           <Route path="/restaurants/add">
             <AddRestaurant />
