@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
+import { authHeader } from './auth'
 
 const dateFormat = `EEEE, MMMM do, yyyy 'at' h:mm aaa`
 
@@ -43,12 +44,18 @@ export function ShowRestaurant() {
   const handleNewReviewSubmit = event => {
     event.preventDefault()
 
-    fetch(`/api/Reviews`, {
+    fetch('/api/Reviews', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...authHeader() },
       body: JSON.stringify(newReview),
     })
-      .then(response => response.json)
+      .then(response => {
+        if (response.status === 401) {
+          return {}
+        } else {
+          return response.json()
+        }
+      })
       .then(apiResponse => {
         fetchRestaurant()
         setNewReview({ ...newReview, body: '', summary: '' })

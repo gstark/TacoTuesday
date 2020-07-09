@@ -30,6 +30,8 @@ namespace TacoTuesday.Models
             this.DownvoteCount++;
         }
 
+        public int UserId { get; set; }
+
         public List<Review> Reviews { get; set; }
     }
 }

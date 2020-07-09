@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router'
+import { authHeader } from './auth'
 
 export function AddRestaurant() {
   const history = useHistory()
@@ -23,15 +24,20 @@ export function AddRestaurant() {
   const handleFormSubmit = event => {
     event.preventDefault()
 
-    console.log('submitting')
     fetch('/api/Restaurants', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...authHeader() },
       body: JSON.stringify(newRestaurant),
     })
-      .then(response => response.json())
+      .then(response => {
+        if (response.status === 401) {
+          return { status: 401, errors: { login: 'Not Authorized ' } }
+        } else {
+          return response.json()
+        }
+      })
       .then(apiResponse => {
-        if (apiResponse.status === 400) {
+        if (apiResponse.status != 201) {
           setErrorMessage(Object.values(apiResponse.errors).join(' '))
         } else {
           history.push('/')
