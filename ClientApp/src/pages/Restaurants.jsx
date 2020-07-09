@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { authHeader, isLoggedIn } from './auth'
 
 function SingleRestaurantFromList(props) {
   const restaurant = props.restaurant
@@ -14,34 +15,38 @@ function SingleRestaurantFromList(props) {
         <small>{restaurant.reviews.length} Reviews</small>
       </div>
       <p className="mb-1">{restaurant.address}</p>
-      <small className="mr-3">
-        <button
-          className="btn btn-success btn-sm"
-          onClick={event => {
-            event.preventDefault()
-            props.handleVote(restaurant.id, 'upvote')
-          }}
-        >
-          <span className="mr-2" role="img" aria-label="upvote">
-            👍🏻
-          </span>
-          {restaurant.upvoteCount}
-        </button>
-      </small>
-      <small className="mr-3">
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={event => {
-            event.preventDefault()
-            props.handleVote(restaurant.id, 'downvote')
-          }}
-        >
-          <span className="mr-2" role="img" aria-label="downvote">
-            👎🏻
-          </span>{' '}
-          {restaurant.downvoteCount}
-        </button>
-      </small>
+      {isLoggedIn() && (
+        <small className="mr-3">
+          <button
+            className="btn btn-success btn-sm"
+            onClick={event => {
+              event.preventDefault()
+              props.handleVote(restaurant.id, 'upvote')
+            }}
+          >
+            <span className="mr-2" role="img" aria-label="upvote">
+              👍🏻
+            </span>
+            {restaurant.upvoteCount}
+          </button>
+        </small>
+      )}
+      {isLoggedIn() && (
+        <small className="mr-3">
+          <button
+            className="btn btn-danger btn-sm"
+            onClick={event => {
+              event.preventDefault()
+              props.handleVote(restaurant.id, 'downvote')
+            }}
+          >
+            <span className="mr-2" role="img" aria-label="downvote">
+              👎🏻
+            </span>{' '}
+            {restaurant.downvoteCount}
+          </button>
+        </small>
+      )}
     </Link>
   )
 }
@@ -73,7 +78,7 @@ export function Restaurants(props) {
 
     fetch(url, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...authHeader() },
     }).then(() => {
       reloadRestaurants()
     })
