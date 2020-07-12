@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace TacoTuesday.Models
 {
@@ -31,6 +32,10 @@ namespace TacoTuesday.Models
         }
 
         public int UserId { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
 
         public List<Review> Reviews { get; set; }
     }
