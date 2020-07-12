@@ -21,28 +21,27 @@ export function AddRestaurant() {
     setNewRestaurant(updatedRestaurant)
   }
 
-  const handleFormSubmit = event => {
+  const handleFormSubmit = async event => {
     event.preventDefault()
 
-    fetch('/api/Restaurants', {
+    const response = await fetch('/api/Restaurants', {
       method: 'POST',
       headers: { 'content-type': 'application/json', ...authHeader() },
       body: JSON.stringify(newRestaurant),
     })
-      .then(response => {
-        if (response.status === 401) {
-          return { status: 401, errors: { login: 'Not Authorized ' } }
-        } else {
-          return response.json()
-        }
-      })
-      .then(apiResponse => {
-        if (apiResponse.status != 201) {
-          setErrorMessage(Object.values(apiResponse.errors).join(' '))
-        } else {
-          history.push('/')
-        }
-      })
+
+    if (response.status === 401) {
+      setErrorMessage('Not Authorized')
+      return
+    }
+
+    const apiResponse = await response.json()
+
+    if (apiResponse.errors) {
+      setErrorMessage(Object.values(apiResponse.errors).join(' '))
+    } else {
+      history.push('/')
+    }
   }
 
   return (
