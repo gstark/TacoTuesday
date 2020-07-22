@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Route } from 'react-router'
+import cx from 'classnames'
 import { isLoggedIn, logout } from '../pages/auth'
 
 export function NavBar(props) {
@@ -36,7 +37,7 @@ export function NavBar(props) {
       </button>
 
       <div
-        className={`collapse navbar-collapse ${navbarIsOpen ? 'show' : ''}`}
+        className={cx('collapse', 'navbar-collapse', { show: navbarIsOpen })}
         id="navbarSupportedContent"
       >
         <ul className="navbar-nav mr-auto">
