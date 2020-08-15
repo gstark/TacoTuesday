@@ -91,27 +91,25 @@ namespace TacoTuesday
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
+            app.UseSpa(spa =>
+            {
+            spa.Options.SourcePath = "ClientApp";
+
             if (env.IsDevelopment())
             {
-                app.UseSpa(spa =>
-                {
-                    spa.Options.SourcePath = "ClientApp";
+                spa.UseReactDevelopmentServer(npmScript: "start");
 
-                    spa.UseReactDevelopmentServer(npmScript: "start");
-                });
-            }
-            else
+            });
+
+            app.UseSpaStaticFiles(new StaticFileOptions
             {
-                app.UseSpaStaticFiles(new StaticFileOptions
+                OnPrepareResponse = context =>
                 {
-                    OnPrepareResponse = context =>
-                    {
-                        Console.WriteLine("ZOMG");
-                        const int oneDayInSeconds = 60 * 60 * 24;
-                        context.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + oneDayInSeconds;
-                    }
-                });
-            }
+                    Console.WriteLine("ZOMG");
+                    const int oneDayInSeconds = 60 * 60 * 24;
+                    context.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + oneDayInSeconds;
+                }
+            });
         }
     }
 }
