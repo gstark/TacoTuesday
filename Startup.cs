@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using TacoTuesday.Models;
 
@@ -70,8 +72,6 @@ namespace TacoTuesday
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseSpaStaticFiles();
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
@@ -91,15 +91,27 @@ namespace TacoTuesday
                     pattern: "{controller}/{action=Index}/{id?}");
             });
 
-            app.UseSpa(spa =>
+            if (env.IsDevelopment())
             {
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
+                app.UseSpa(spa =>
                 {
+                    spa.Options.SourcePath = "ClientApp";
+
                     spa.UseReactDevelopmentServer(npmScript: "start");
-                }
-            });
+                });
+            }
+            else
+            {
+                app.UseSpaStaticFiles(new StaticFileOptions
+                {
+                    OnPrepareResponse = context =>
+                    {
+                        Console.WriteLine("ZOMG");
+                        const int oneDayInSeconds = 60 * 60 * 24;
+                        context.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + oneDayInSeconds;
+                    }
+                });
+            }
         }
     }
 }
