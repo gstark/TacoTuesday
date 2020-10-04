@@ -21,18 +21,24 @@ function SingleRestaurantFromList(props) {
 }
 
 export function Restaurants() {
+  const [filterText, setFilterText] = useState('')
   const [restaurants, setRestaurants] = useState([])
 
   useEffect(() => {
     async function loadRestaurants() {
-      const response = await fetch('/api/restaurants')
+      const url =
+        filterText.length === 0
+          ? `/api/Restaurants`
+          : `/api/Restaurants?filter=${filterText}`
+
+      const response = await fetch(url)
       const json = await response.json()
 
       setRestaurants(json)
     }
 
     loadRestaurants()
-  }, [])
+  }, [filterText])
 
   return (
     <>
@@ -56,7 +62,14 @@ export function Restaurants() {
           <img src={tacoTuesday} alt="Taco Tuesday" />
         </h1>
         <form className="search">
-          <input type="text" placeholder="Search..." />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={filterText}
+            onChange={function (event) {
+              setFilterText(event.target.value)
+            }}
+          />
         </form>
 
         <section className="map">
