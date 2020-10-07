@@ -5,6 +5,8 @@ import avatar from '../images/avatar.png'
 export function NewRestaurant() {
   const history = useHistory()
 
+  const [errorMessage, setErrorMessage] = useState()
+
   const [newRestaurant, setNewRestaurant] = useState({
     name: '',
     description: '',
@@ -32,7 +34,11 @@ export function NewRestaurant() {
 
     const json = await response.json()
 
-    history.push('/')
+    if (response.status === 400) {
+      setErrorMessage(Object.values(json.errors).join(' '))
+    } else {
+      history.push('/')
+    }
   }
 
   return (
@@ -60,6 +66,7 @@ export function NewRestaurant() {
           <h2>Add a Restaurant</h2>
         </nav>
         <form onSubmit={handleFormSubmit}>
+          {errorMessage && <p>{errorMessage}</p>}
           <p className="form-input">
             <label htmlFor="name">Name</label>
             <input
