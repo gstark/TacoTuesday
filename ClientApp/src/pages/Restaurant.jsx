@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import avatar from '../images/avatar.png'
 
 export function Restaurant() {
@@ -21,9 +22,9 @@ export function Restaurant() {
       </header>
       <main className="page">
         <nav>
-          <a href="/">
+          <Link to="/">
             <i className="fa fa-home"></i>
-          </a>
+          </Link>
           <h2>Loli's Mexican Cravings</h2>
         </nav>
         <p>

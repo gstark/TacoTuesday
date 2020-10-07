@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import avatar from '../images/avatar.png'
 
 export function SignIn() {
@@ -21,9 +22,9 @@ export function SignIn() {
       </header>
       <main className="page">
         <nav>
-          <a href="/">
+          <Link to="/">
             <i className="fa fa-home"></i>
-          </a>
+          </Link>
           <h2>Sign In</h2>
         </nav>
         <form action="#">

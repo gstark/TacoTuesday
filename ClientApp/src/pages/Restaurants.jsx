@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import avatar from '../images/avatar.png'
 import tacoTuesday from '../images/taco-tuesday.svg'
 import map from '../images/map.png'
@@ -46,9 +47,9 @@ export function Restaurants() {
         <ul>
           <li>
             <nav>
-              <a href="#">
+              <Link to="/new">
                 <i className="fa fa-plus"></i> Restaurant
-              </a>
+              </Link>
               <p>Welcome back, Steve!</p>
             </nav>
           </li>
