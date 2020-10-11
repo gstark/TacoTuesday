@@ -1,17 +1,38 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import avatar from '../images/avatar.png'
 
 export function Restaurant() {
+  const params = useParams()
+  const id = params.id
+
+  const [restaurant, setRestaurant] = useState({
+    name: '',
+    description: '',
+    address: '',
+    telephone: '',
+  })
+
+  useState(() => {
+    const fetchRestaurant = async () => {
+      const response = await fetch(`/api/Restaurants/${id}`)
+      const apiData = await response.json()
+
+      setRestaurant(apiData)
+    }
+
+    fetchRestaurant()
+  }, [id])
+
   return (
     <>
       <header>
         <ul>
           <li>
             <nav>
-              <a href="#">
+              <Link to="/new">
                 <i className="fa fa-plus"></i> Restaurant
-              </a>
+              </Link>
               <p>Welcome back, Steve!</p>
             </nav>
           </li>
@@ -25,7 +46,7 @@ export function Restaurant() {
           <Link to="/">
             <i className="fa fa-home"></i>
           </Link>
-          <h2>Loli's Mexican Cravings</h2>
+          <h2>{restaurant.name}</h2>
         </nav>
         <p>
           <span
@@ -35,9 +56,10 @@ export function Restaurant() {
           ></span>
           (2,188)
         </p>
-        <address>8005 Benjamin Rd, Tampa, FL 33634</address>
+        <address>{restaurant.address}</address>
+        <p>{restaurant.description}</p>
         <hr />
-        <h3>Reviews for Loli's Mexican Cravings</h3>
+        <h3>Reviews for {restaurant.name}</h3>
         <ul className="reviews">
           <li>
             <div className="author">
