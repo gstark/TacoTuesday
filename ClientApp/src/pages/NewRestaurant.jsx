@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import { authHeader } from '../auth'
 
 export function NewRestaurant() {
   const history = useHistory()
@@ -27,16 +28,20 @@ export function NewRestaurant() {
 
     const response = await fetch('/api/Restaurants', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...authHeader() },
       body: JSON.stringify(newRestaurant),
     })
 
-    const json = await response.json()
-
-    if (response.status === 400) {
-      setErrorMessage(Object.values(json.errors).join(' '))
+    if (response.status === 401) {
+      setErrorMessage('Not Authorized')
     } else {
-      history.push('/')
+      if (response.status === 400) {
+        const json = await response.json()
+
+        setErrorMessage(Object.values(json.errors).join(' '))
+      } else {
+        history.push('/')
+      }
     }
   }
 

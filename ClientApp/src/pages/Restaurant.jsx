@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
+import { authHeader } from '../auth'
 
 import { isLoggedIn } from '../auth'
 
 export function Restaurant() {
   const params = useParams()
   const id = Number(params.id)
+
+  const [errorMessage, setErrorMessage] = useState()
 
   const [restaurant, setRestaurant] = useState({
     name: '',
@@ -35,19 +38,30 @@ export function Restaurant() {
   async function handleNewReviewSubmit(event) {
     event.preventDefault()
 
-    await fetch(`/api/Reviews`, {
+    const response = await fetch(`/api/Reviews`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', ...authHeader() },
       body: JSON.stringify(newReview),
     })
 
-    setNewReview({
-      ...newReview,
-      body: '',
-      summary: '',
-      stars: 0,
-    })
-    fetchRestaurant()
+    if (response.status === 401) {
+      setErrorMessage('Not Authorized')
+    } else {
+      if (response.status === 400) {
+        const json = await response.json()
+
+        setErrorMessage(Object.values(json.errors).join(' '))
+      } else {
+        setNewReview({
+          ...newReview,
+          body: '',
+          summary: '',
+          stars: 0,
+        })
+
+        fetchRestaurant()
+      }
+    }
   }
 
   function handleStarRadioButton(newStars) {
@@ -108,6 +122,7 @@ export function Restaurant() {
       {isLoggedIn() && (
         <>
           <h3>Enter your own review</h3>
+          {errorMessage && <p>{errorMessage}</p>}
           <form onSubmit={handleNewReviewSubmit}>
             <p className="form-input">
               <label htmlFor="summary">Summary</label>
