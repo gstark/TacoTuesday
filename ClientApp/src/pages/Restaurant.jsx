@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 
+import { isLoggedIn } from '../auth'
+
 export function Restaurant() {
   const params = useParams()
   const id = Number(params.id)
@@ -103,103 +105,107 @@ export function Restaurant() {
           </li>
         ))}
       </ul>
-      <h3>Enter your own review</h3>
-      <form onSubmit={handleNewReviewSubmit}>
-        <p className="form-input">
-          <label htmlFor="summary">Summary</label>
-          <input
-            type="text"
-            name="summary"
-            value={newReview.summary}
-            onChange={handleNewReviewTextFieldChange}
-          />
-          <span className="note">
-            Enter a brief summary of your review. Example:{' '}
-            <strong>Great food, good prices.</strong>
-          </span>
-        </p>
-        <p className="form-input">
-          <label htmlFor="body">Review</label>
-          <textarea
-            name="body"
-            value={newReview.body}
-            onChange={handleNewReviewTextFieldChange}
-          />
-        </p>
-        <div className="rating">
-          <input
-            id="star-rating-1"
-            type="radio"
-            name="stars"
-            checked={newReview.stars === 1}
-            onChange={() => handleStarRadioButton(1)}
-          />
-          <label htmlFor="star-rating-1">1 star</label>
-          <input
-            id="star-rating-2"
-            type="radio"
-            name="stars"
-            checked={newReview.stars === 2}
-            onChange={() => handleStarRadioButton(2)}
-          />
-          <label htmlFor="star-rating-2">2 stars</label>
-          <input
-            id="star-rating-3"
-            type="radio"
-            name="stars"
-            checked={newReview.stars === 3}
-            onChange={() => handleStarRadioButton(3)}
-          />
-          <label htmlFor="star-rating-3">3 stars</label>
-          <input
-            id="star-rating-4"
-            type="radio"
-            name="stars"
-            checked={newReview.stars === 4}
-            onChange={() => handleStarRadioButton(4)}
-          />
-          <label htmlFor="star-rating-4">4 stars</label>
-          <input
-            id="star-rating-5"
-            type="radio"
-            name="stars"
-            checked={newReview.stars === 5}
-            onChange={() => handleStarRadioButton(5)}
-          />
-          <label htmlFor="star-rating-5">5 stars</label>
+      {isLoggedIn() && (
+        <>
+          <h3>Enter your own review</h3>
+          <form onSubmit={handleNewReviewSubmit}>
+            <p className="form-input">
+              <label htmlFor="summary">Summary</label>
+              <input
+                type="text"
+                name="summary"
+                value={newReview.summary}
+                onChange={handleNewReviewTextFieldChange}
+              />
+              <span className="note">
+                Enter a brief summary of your review. Example:{' '}
+                <strong>Great food, good prices.</strong>
+              </span>
+            </p>
+            <p className="form-input">
+              <label htmlFor="body">Review</label>
+              <textarea
+                name="body"
+                value={newReview.body}
+                onChange={handleNewReviewTextFieldChange}
+              />
+            </p>
+            <div className="rating">
+              <input
+                id="star-rating-1"
+                type="radio"
+                name="stars"
+                checked={newReview.stars === 1}
+                onChange={() => handleStarRadioButton(1)}
+              />
+              <label htmlFor="star-rating-1">1 star</label>
+              <input
+                id="star-rating-2"
+                type="radio"
+                name="stars"
+                checked={newReview.stars === 2}
+                onChange={() => handleStarRadioButton(2)}
+              />
+              <label htmlFor="star-rating-2">2 stars</label>
+              <input
+                id="star-rating-3"
+                type="radio"
+                name="stars"
+                checked={newReview.stars === 3}
+                onChange={() => handleStarRadioButton(3)}
+              />
+              <label htmlFor="star-rating-3">3 stars</label>
+              <input
+                id="star-rating-4"
+                type="radio"
+                name="stars"
+                checked={newReview.stars === 4}
+                onChange={() => handleStarRadioButton(4)}
+              />
+              <label htmlFor="star-rating-4">4 stars</label>
+              <input
+                id="star-rating-5"
+                type="radio"
+                name="stars"
+                checked={newReview.stars === 5}
+                onChange={() => handleStarRadioButton(5)}
+              />
+              <label htmlFor="star-rating-5">5 stars</label>
 
-          <div className="star-rating">
-            <label
-              htmlFor="star-rating-1"
-              aria-label="1 star"
-              title="1 star"
-            ></label>
-            <label
-              htmlFor="star-rating-2"
-              aria-label="2 stars"
-              title="2 stars"
-            ></label>
-            <label
-              htmlFor="star-rating-3"
-              aria-label="3 stars"
-              title="3 stars"
-            ></label>
-            <label
-              htmlFor="star-rating-4"
-              aria-label="4 stars"
-              title="4 stars"
-            ></label>
-            <label
-              htmlFor="star-rating-5"
-              aria-label="5 stars"
-              title="5 stars"
-            ></label>
-          </div>
-        </div>
-        <p>
-          <input type="submit" value="Submit" />
-        </p>
-      </form>
+              <div className="star-rating">
+                <label
+                  htmlFor="star-rating-1"
+                  aria-label="1 star"
+                  title="1 star"
+                ></label>
+                <label
+                  htmlFor="star-rating-2"
+                  aria-label="2 stars"
+                  title="2 stars"
+                ></label>
+                <label
+                  htmlFor="star-rating-3"
+                  aria-label="3 stars"
+                  title="3 stars"
+                ></label>
+                <label
+                  htmlFor="star-rating-4"
+                  aria-label="4 stars"
+                  title="4 stars"
+                ></label>
+                <label
+                  htmlFor="star-rating-5"
+                  aria-label="5 stars"
+                  title="5 stars"
+                ></label>
+              </div>
+            </div>
+            <p>
+              <input type="submit" value="Submit" />
+            </p>
+          </form>
+        </>
+      )}
     </main>
   )
 }

@@ -80,7 +80,8 @@ header nav > * {
   margin: 0 1rem;
 }
 
-header nav a {
+header nav a,
+header nav .link {
   background: var(--purple-0);
   color: white;
   border: none;

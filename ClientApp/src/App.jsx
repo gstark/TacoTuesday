@@ -9,25 +9,43 @@ import { Restaurant } from './pages/Restaurant'
 import avatar from './images/avatar.png'
 import { SignUp } from './pages/SignUp'
 import { SignIn } from './pages/SignIn'
+import { getUser, isLoggedIn, logout } from './auth'
 
 export function App() {
+  const user = getUser()
+
+  function handleLogout() {
+    logout()
+
+    window.location.assign('/')
+  }
+
   return (
     <>
       <header>
         <ul>
           <li>
             <nav>
-              <Link to="/new">
-                <i className="fa fa-plus"></i> Restaurant
-              </Link>
-              <Link to="/signup">Sign Up</Link>
-              <Link to="/signin">Sign In</Link>
-              <p>Welcome back, Steve!</p>
+              {isLoggedIn() && (
+                <Link to="/new">
+                  <i className="fa fa-plus"></i> Restaurant
+                </Link>
+              )}
+              {isLoggedIn() || <Link to="/signup">Sign Up</Link>}
+              {isLoggedIn() || <Link to="/signin">Sign In</Link>}
+              {isLoggedIn() && (
+                <span className="link" onClick={handleLogout}>
+                  Sign out
+                </span>
+              )}
+              {isLoggedIn() && <p>Welcome back, {user.fullName}!</p>}
             </nav>
           </li>
-          <li className="avatar">
-            <img src={avatar} alt="Steve's Avatar" height="64" width="64" />
-          </li>
+          {isLoggedIn() && (
+            <li className="avatar">
+              <img src={avatar} alt="Steve's Avatar" height="64" width="64" />
+            </li>
+          )}
         </ul>
       </header>
       <Switch>
