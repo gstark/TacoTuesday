@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
 import { authHeader } from '../auth'
+import { Stars } from '../components/Stars'
 
 import { isLoggedIn } from '../auth'
 
@@ -88,12 +89,7 @@ export function Restaurant() {
         <h2>{restaurant.name}</h2>
       </nav>
       <p>
-        <span
-          className="stars"
-          style={{ '--rating': 4.7 }}
-          aria-label="Star rating of this location is 4.7 out of 5."
-        ></span>
-        ({restaurant.reviews.length})
+        <Stars restaurant={restaurant} />({restaurant.reviews.length})
       </p>
       <address>{restaurant.address}</address>
       <p>{restaurant.description}</p>

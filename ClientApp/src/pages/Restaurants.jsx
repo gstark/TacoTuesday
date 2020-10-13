@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import tacoTuesday from '../images/taco-tuesday.svg'
 import map from '../images/map.png'
+import { Stars } from '../components/Stars'
 
 function SingleRestaurantFromList(props) {
   return (
@@ -12,12 +13,8 @@ function SingleRestaurantFromList(props) {
         </Link>
       </h2>
       <p>
-        <span
-          className="stars"
-          style={{ '--rating': 4.7 }}
-          aria-label="Star rating of this location is 4.7 out of 5."
-        ></span>
-        ({props.restaurant.reviews.length})
+        <Stars restaurant={props.restaurant} />(
+        {props.restaurant.reviews.length})
       </p>
       <address>{props.restaurant.address}</address>
     </li>
