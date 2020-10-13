@@ -10,6 +10,7 @@ namespace TacoTuesday.Models
         public int Stars { get; set; }
         public DateTime CreatedAt { get; private set; } = DateTime.Now;
         public int UserId { get; set; }
+        public User User { get; set; }
         public int RestaurantId { get; set; }
     }
 }
