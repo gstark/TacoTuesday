@@ -17,6 +17,10 @@ namespace TacoTuesday.Models
 
         public string Telephone { get; set; }
 
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+
         public int UserId { get; set; }
 
         public List<Review> Reviews { get; set; }
