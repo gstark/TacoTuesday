@@ -8,6 +8,7 @@ import { Restaurant } from './pages/Restaurant'
 
 import avatar from './images/avatar.png'
 import { SignUp } from './pages/SignUp'
+import { SignIn } from './pages/SignIn'
 
 export function App() {
   return (
@@ -20,6 +21,7 @@ export function App() {
                 <i className="fa fa-plus"></i> Restaurant
               </Link>
               <Link to="/signup">Sign Up</Link>
+              <Link to="/signin">Sign In</Link>
               <p>Welcome back, Steve!</p>
             </nav>
           </li>
@@ -40,6 +42,9 @@ export function App() {
         </Route>
         <Route exact path="/signup">
           <SignUp />
+        </Route>
+        <Route exact path="/signin">
+          <SignIn />
         </Route>
       </Switch>
       <footer>
