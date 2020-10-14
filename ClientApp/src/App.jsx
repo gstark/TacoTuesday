@@ -9,6 +9,7 @@ import { Restaurant } from './pages/Restaurant'
 import { SignUp } from './pages/SignUp'
 import { SignIn } from './pages/SignIn'
 import { getUser, isLoggedIn, logout } from './auth'
+import { EditUser } from './pages/EditUser'
 
 export function App() {
   const user = getUser()
@@ -32,6 +33,7 @@ export function App() {
               )}
               {isLoggedIn() || <Link to="/signup">Sign Up</Link>}
               {isLoggedIn() || <Link to="/signin">Sign In</Link>}
+              {isLoggedIn() && <Link to="/profile">Profile</Link>}
               {isLoggedIn() && (
                 <span className="link" onClick={handleLogout}>
                   Sign out
@@ -67,6 +69,9 @@ export function App() {
         </Route>
         <Route exact path="/signin">
           <SignIn />
+        </Route>
+        <Route exact path="/profile">
+          <EditUser />
         </Route>
       </Switch>
       <footer>
