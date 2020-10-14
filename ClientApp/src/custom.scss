@@ -417,3 +417,10 @@ label[for]:hover {
 .mapboxgl-popup {
   z-index: 1;
 }
+
+.file-drop-zone {
+  text-align: center;
+  padding: 1.5rem 0;
+  background-color: var(--purple-1);
+  color: white;
+}

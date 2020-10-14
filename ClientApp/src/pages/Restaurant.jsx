@@ -93,6 +93,11 @@ export function Restaurant() {
       </p>
       <address>{restaurant.address}</address>
       <p>{restaurant.description}</p>
+      {restaurant.photoURL && (
+        <p>
+          <img alt="Restaurant Photo" width={200} src={restaurant.photoURL} />
+        </p>
+      )}
       <hr />
       <h3>Reviews for {restaurant.name}</h3>
       <ul className="reviews">
