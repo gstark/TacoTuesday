@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useReducer, useState } from 'react'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import format from 'date-fns/format'
-import { authHeader } from '../auth'
+import { authHeader, getUser } from '../auth'
 import { Stars } from '../components/Stars'
 
 import { isLoggedIn } from '../auth'
 
 export function Restaurant() {
+  const history = useHistory()
+
   const params = useParams()
   const id = Number(params.id)
+
+  const user = getUser()
 
   const [errorMessage, setErrorMessage] = useState()
 
@@ -34,6 +38,19 @@ export function Restaurant() {
     const value = event.target.value
 
     setNewReview({ ...newReview, [name]: value })
+  }
+
+  async function handleDelete(event) {
+    event.preventDefault()
+
+    const response = await fetch(`/api/Restaurants/${id}`, {
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json', ...authHeader() },
+    })
+
+    if (response.status === 200 || response.status === 204) {
+      history.push('/')
+    }
   }
 
   async function handleNewReviewSubmit(event) {
@@ -96,6 +113,11 @@ export function Restaurant() {
       {restaurant.photoURL && (
         <p>
           <img alt="Restaurant Photo" width={200} src={restaurant.photoURL} />
+        </p>
+      )}
+      {isLoggedIn() && restaurant.userId === user.id && (
+        <p>
+          <button onClick={handleDelete}>Delete</button>
         </p>
       )}
       <hr />
