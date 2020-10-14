@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ReactMapGL, { Marker, NavigationControl, Popup } from 'react-map-gl'
+import 'mapbox-gl/dist/mapbox-gl.css'
+
 import tacoTuesday from '../images/taco-tuesday.svg'
-import map from '../images/map.png'
 import { Stars } from '../components/Stars'
 
 function SingleRestaurantFromList(props) {
@@ -24,6 +26,15 @@ function SingleRestaurantFromList(props) {
 export function Restaurants() {
   const [filterText, setFilterText] = useState('')
   const [restaurants, setRestaurants] = useState([])
+  const [selectedMapRestaurant, setSelectedMapRestaurant] = useState(null)
+
+  const [viewport, setViewport] = useState({
+    width: 327,
+    height: 264,
+    latitude: 27.77101804911986,
+    longitude: -82.66090611749074,
+    zoom: 9.8,
+  })
 
   useEffect(() => {
     async function loadRestaurants() {
@@ -58,7 +69,46 @@ export function Restaurants() {
       </form>
 
       <section className="map">
-        <img alt="Example Map" src={map} />
+        <ReactMapGL
+          style={{ position: 'absolute' }}
+          {...viewport}
+          onViewportChange={setViewport}
+          mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+        >
+          <div style={{ position: 'absolute', right: 0 }}>
+            <NavigationControl />
+          </div>
+          {selectedMapRestaurant && (
+            <Popup
+              latitude={selectedMapRestaurant.latitude}
+              longitude={selectedMapRestaurant.longitude}
+              closeButton={true}
+              closeOnClick={false}
+              onClose={() => setSelectedMapRestaurant(null)}
+              offsetTop={-5}
+            >
+              <div>
+                <p>{selectedMapRestaurant.name}</p>
+                <p>{selectedMapRestaurant.description}</p>
+              </div>
+            </Popup>
+          )}
+          {restaurants.map((restaurant) => (
+            <Marker
+              key={restaurant.id}
+              latitude={restaurant.latitude}
+              longitude={restaurant.longitude}
+            >
+              <span
+                role="img"
+                aria-label="taco"
+                onClick={() => setSelectedMapRestaurant(restaurant)}
+              >
+                🌮
+              </span>
+            </Marker>
+          ))}
+        </ReactMapGL>
       </section>
 
       <ul className="results">
