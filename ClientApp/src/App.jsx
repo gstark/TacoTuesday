@@ -6,7 +6,6 @@ import './custom.scss'
 import { NewRestaurant } from './pages/NewRestaurant'
 import { Restaurant } from './pages/Restaurant'
 
-import avatar from './images/avatar.png'
 import { SignUp } from './pages/SignUp'
 import { SignIn } from './pages/SignIn'
 import { getUser, isLoggedIn, logout } from './auth'
@@ -41,9 +40,14 @@ export function App() {
               {isLoggedIn() && <p>Welcome back, {user.fullName}!</p>}
             </nav>
           </li>
-          {isLoggedIn() && (
+          {isLoggedIn() && user.photoURL && (
             <li className="avatar">
-              <img src={avatar} alt="Steve's Avatar" height="64" width="64" />
+              <img
+                src={user.photoURL}
+                alt={`${user.fullName}'s Avatar`}
+                height="64"
+                width="64"
+              />
             </li>
           )}
         </ul>
